@@ -40,21 +40,25 @@ import java.util.List;
 
 public class CheeseListFragment extends Fragment {
 
+
     private RecyclerView recyclerViewList;
     private List<Cheese> cheeseList;
     private Context context;
 
+    // cheeseList initialise only once when we construct array list of fragments. We use for that default constructor.
     public CheeseListFragment() {
         LoadListAsyncTask loadListAsyncTask = new LoadListAsyncTask();
         loadListAsyncTask.execute();
     }
 
+    //When fragment attached to activity we save context for using later
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
     }
 
+    //The main goal of onCreateView - initialise recyclerView when fragment chooses from tabs.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class CheeseListFragment extends Fragment {
         return recyclerViewList;
     }
 
+    //setupRecyclerView using in onCreateView and onPostExecute (AsyncTask) methods.
+    // That's why we must check if fragment was attach to activity. Async task can finish work before fragment attach and then we will have NullPointerExeption
     private void setupRecyclerView(List<Cheese> cheeses) {
         if (isAdded()){
             recyclerViewList.setLayoutManager(new LinearLayoutManager(context));
