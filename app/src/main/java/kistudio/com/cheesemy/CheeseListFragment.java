@@ -40,6 +40,7 @@ import java.util.List;
 
 public class CheeseListFragment extends Fragment {
 
+    private static final int LIST_SIZE = 30;
 
     private RecyclerView recyclerViewList;
     private List<Cheese> cheeseList;
@@ -76,9 +77,11 @@ public class CheeseListFragment extends Fragment {
         }
     }
 
+    //Method starts after onPostExecute. Setting result to cheeseList object.
     private void saveList(List<Cheese> list) {
         this.cheeseList = list;
     }
+
 
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
@@ -154,6 +157,7 @@ public class CheeseListFragment extends Fragment {
         }
     }
 
+    //Async task for loading list using static method CheeseApi.listCheeses()
     private class LoadListAsyncTask extends AsyncTask<Void,Void,List<Cheese>> {
 
         @Override
@@ -165,7 +169,7 @@ public class CheeseListFragment extends Fragment {
         protected List<Cheese> doInBackground(Void... params) {
             List<Cheese> cheeses;
             try {
-                cheeses = CheeseApi.listCheeses(30);
+                cheeses = CheeseApi.listCheeses(LIST_SIZE);
             } catch (IOException e) {
                 ArrayList<Cheese> list = new ArrayList<>();
                 list.add(new Cheese(R.mipmap.ic_reload, getResources().getString(R.string.error_with_api)));
@@ -181,6 +185,5 @@ public class CheeseListFragment extends Fragment {
             super.onPostExecute(cheeses);
         }
     }
-
-
+    
 }
